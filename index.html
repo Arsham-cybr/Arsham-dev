@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arsham Dev — Learn to code, get scripts built</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0a0b;
+    --panel: #131316;
+    --panel-2: #1a1a1e;
+    --line: #26262b;
+    --text: #f5f5f7;
+    --dim: #8c8c94;
+    --mint: #00ffa3;
+    --mint-dim: #0a3a2a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+  }
+  ::selection{ background: var(--mint); color:#0a0a0b; }
+  a{ color:inherit; }
+
+  .glow{
+    position:fixed; top:-200px; left:50%; transform:translateX(-50%);
+    width:900px; height:500px;
+    background: radial-gradient(ellipse at center, rgba(0,255,163,0.10), transparent 65%);
+    pointer-events:none; z-index:0;
+  }
+
+  header{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 6vw;
+    background: rgba(10,10,11,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700; font-size:19px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .logo .dot{ width:8px; height:8px; background:var(--mint); border-radius:2px; box-shadow:0 0 10px var(--mint);}
+  nav ul{ display:flex; gap:32px; list-style:none; }
+  nav a{ text-decoration:none; color:var(--dim); font-size:14px; font-weight:500; transition:color 0.15s; }
+  nav a:hover{ color:var(--text); }
+  .nav-right{ display:flex; align-items:center; gap:20px; }
+  .pill{
+    padding:10px 20px; border-radius:100px;
+    font-size:13.5px; font-weight:600;
+    text-decoration:none;
+    transition: all 0.15s ease;
+    white-space:nowrap;
+  }
+  .pill.ghost{ border:1px solid var(--line); color:var(--text); }
+  .pill.ghost:hover{ border-color:var(--mint); color:var(--mint); }
+  .pill.solid{ background:var(--mint); color:#06120d; }
+  .pill.solid:hover{ background:#33ffb8; transform:translateY(-1px); }
+
+  /* HERO */
+  .hero{
+    position:relative; z-index:1;
+    text-align:center;
+    padding: 110px 6vw 90px;
+    max-width:980px; margin:0 auto;
+  }
+  .kicker{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px; color:var(--mint);
+    border:1px solid var(--mint-dim);
+    background: rgba(0,255,163,0.05);
+    padding:6px 14px; border-radius:100px;
+    margin-bottom:28px;
+  }
+  .kicker::before{ content:"●"; font-size:8px; animation: pulse 1.6s infinite; }
+  @keyframes pulse{ 50%{ opacity:0.3; } }
+
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size: clamp(38px, 6.4vw, 76px);
+    line-height:1.05;
+    letter-spacing:-0.02em;
+    color: #4a4a52;
+  }
+  h1 .bright{ color: var(--text); }
+  h1 .accent{ color: var(--mint); }
+
+  .hero p{
+    margin: 26px auto 0;
+    max-width: 52ch;
+    color: var(--dim);
+    font-size:16px;
+  }
+  .hero-cta{ margin-top:36px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .pill.lg{ padding:14px 28px; font-size:14.5px; }
+
+  /* SECTION SHELL */
+  section{ position:relative; z-index:1; padding: 70px 6vw; max-width:1180px; margin:0 auto; }
+  .section-head{ text-align:center; margin-bottom:48px; }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; color:var(--mint);
+    text-transform:uppercase; letter-spacing:0.14em;
+    margin-bottom:12px;
+  }
+  h2{ font-family:'Space Grotesk', sans-serif; font-size: clamp(26px,3.6vw,36px); font-weight:700; }
+  .section-head p{ color:var(--dim); margin-top:12px; max-width:50ch; margin-left:auto; margin-right:auto; }
+
+  /* SERVICE CARDS */
+  .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:20px; }
+  .card{
+    background: var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+    display:flex; flex-direction:column;
+  }
+  .card:hover{ border-color: var(--mint-dim); transform:translateY(-3px); }
+  .card-top{ padding:26px 22px 16px; display:flex; justify-content:space-between; align-items:flex-start; gap:12px;}
+  .card-icon{
+    width:44px; height:44px; border-radius:11px;
+    background: var(--mint-dim);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:16px;
+  }
+  .card-icon svg{ width:22px; height:22px; stroke: var(--mint); }
+  .card-title{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:18px; }
+  .card-desc{ color:var(--dim); font-size:13.5px; margin-top:8px; line-height:1.55; }
+  .tag{
+    font-family:'JetBrains Mono', monospace; font-size:11px;
+    padding:4px 10px; border-radius:100px;
+    background: var(--mint-dim); color: var(--mint);
+    white-space:nowrap; flex-shrink:0;
+  }
+  .card-mid{ padding:0 22px 20px; margin-top:auto; }
+  .service-list{ list-style:none; margin-top:14px; display:flex; flex-direction:column; gap:8px; }
+  .service-list li{ font-size:12.5px; color:var(--dim); display:flex; align-items:center; gap:8px; }
+  .service-list li::before{ content:"✓"; color:var(--mint); font-weight:700; font-size:11px; }
+  .card-cta{
+    display:block; text-align:center;
+    margin:0 22px 22px;
+    padding:11px 0; border-radius:10px;
+    background: var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--text); font-weight:600; font-size:13.5px;
+    text-decoration:none; transition: all 0.15s ease;
+  }
+  .card-cta:hover{ background: var(--mint); color:#06120d; border-color:var(--mint); }
+  .code-preview{
+    background:#0d0d0f;
+    border-top:1px solid var(--line);
+    padding:16px 20px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    color:#c9c9ce;
+    overflow-x:auto;
+    position:relative;
+  }
+  .code-preview .c1{ color:#7a7a82; }
+  .code-preview .c2{ color: var(--mint); }
+  .code-preview .c3{ color:#7dd3fc; }
+  .code-preview pre{ white-space:pre; }
+  .card-foot{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 20px; border-top:1px solid var(--line);
+  }
+  .card-foot .meta{ font-size:12px; color:var(--dim); font-family:'JetBrains Mono', monospace; }
+  .copy-btn{
+    background:none; border:1px solid var(--line); color:var(--text);
+    font-size:12px; padding:7px 14px; border-radius:8px; cursor:pointer;
+    font-family:'Inter', sans-serif; font-weight:500;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover{ border-color:var(--mint); color:var(--mint); }
+  .copy-btn.done{ border-color:var(--mint); color:var(--mint); }
+
+  /* ABOUT */
+  .about-wrap{
+    display:grid; grid-template-columns: 220px 1fr; gap:44px; align-items:center;
+  }
+  .about-photo{
+    border-radius:16px; overflow:hidden; border:1px solid var(--line);
+    aspect-ratio: 3/4; position:relative;
+  }
+  .about-photo img{ width:100%; height:100%; object-fit:cover; object-position:center 20%; filter:grayscale(25%) contrast(1.05); }
+  .about-photo::after{
+    content:""; position:absolute; inset:0;
+    background: linear-gradient(180deg, transparent 60%, rgba(0,255,163,0.12));
+  }
+  .about-text .eyebrow{ text-align:left; }
+  .about-text h2{ text-align:left; margin-bottom:14px; }
+  .about-text p{ color:var(--dim); font-size:15px; max-width:56ch; }
+  .about-text p + p{ margin-top:12px; }
+  .about-text strong{ color:var(--text); font-weight:600; }
+
+  /* CONTACT */
+  .contact-box{
+    text-align:center;
+    background: var(--panel);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:56px 6vw;
+  }
+  .contact-links{ display:flex; gap:16px; justify-content:center; margin-top:30px; flex-wrap:wrap; }
+  .social-pill{
+    display:flex; align-items:center; gap:10px;
+    padding:14px 26px; border-radius:100px;
+    border:1px solid var(--line);
+    text-decoration:none; color:var(--text);
+    font-weight:600; font-size:14.5px;
+    transition: all 0.15s ease;
+  }
+  .social-pill:hover{ border-color:var(--mint); color:var(--mint); transform:translateY(-2px); }
+  .social-pill svg{ width:18px; height:18px; }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:28px 6vw;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    color:var(--dim); font-size:13px;
+  }
+  footer .brand{ color:var(--text); font-weight:600; font-family:'Space Grotesk', sans-serif; }
+
+  @media (max-width: 720px){
+    nav ul{ display:none; }
+    .about-wrap{ grid-template-columns:1fr; }
+    .about-photo{ max-width:220px; margin:0 auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="glow"></div>
+
+<header>
+  <div class="logo"><span class="dot"></span>Arsham Dev</div>
+  <nav>
+    <ul>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="nav-right">
+    <a href="#contact" class="pill solid">Get in touch</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="kicker">Main sb dekhta hu</div>
+  <h1>Learn to code <span class="bright">or get a</span> <span class="accent">script built for you.</span></h1>
+  <p>I teach Python, Bash, and C++ from scratch — and if you just need something built, I write custom scripts to automate whatever's slowing you down.</p>
+  <div class="hero-cta">
+    <a href="#services" class="pill solid lg">View services</a>
+    <a href="#about" class="pill ghost lg">About me</a>
+  </div>
+</section>
+
+<section id="services">
+  <div class="section-head">
+    <div class="eyebrow">services</div>
+    <h2>What I offer</h2>
+    <p>1-on-1 mentorship or a script built exactly for what you need — pick what fits.</p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C9 2 8 4 8 6v2H6c-2 0-3 1-3 3v2c0 2 1 3 3 3h2v2c0 2 1 4 4 4"/><path d="M12 22c3 0 4-2 4-4v-2h2c2 0 3-1 3-3v-2c0-2-1-3-3-3h-2V6c0-2-1-4-4-4"/><circle cx="9" cy="7" r=".8" fill="currentColor" stroke="none"/><circle cx="15" cy="17" r=".8" fill="currentColor" stroke="none"/></svg></div>
+          <div class="card-title">Learn Python</div>
+          <div class="card-desc">From absolute basics to real projects — automation, scripting, and problem-solving the practical way.</div>
+        </div>
+      </div>
+      <div class="card-mid">
+        <ul class="service-list">
+          <li>Beginner to advanced</li>
+          <li>1-on-1, at your pace</li>
+          <li>Real mini-projects</li>
+        </ul>
+      </div>
+      <a href="#contact" class="card-cta">Get started</a>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
+          <div class="card-title">Learn Bash</div>
+          <div class="card-desc">Master the terminal — shell scripting, automation, and how Linux actually works under the hood.</div>
+        </div>
+      </div>
+      <div class="card-mid">
+        <ul class="service-list">
+          <li>Terminal fundamentals</li>
+          <li>Shell scripting from zero</li>
+          <li>Automate real tasks</li>
+        </ul>
+      </div>
+      <a href="#contact" class="card-cta">Get started</a>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 9a2.5 2.5 0 1 1 0 5"/><path d="M16.5 9a2.5 2.5 0 1 1 0 5"/><circle cx="12" cy="12" r="10"/></svg></div>
+          <div class="card-title">Learn C++</div>
+          <div class="card-desc">Build a real foundation — syntax, memory, data structures, and how to actually think like a programmer.</div>
+        </div>
+      </div>
+      <div class="card-mid">
+        <ul class="service-list">
+          <li>Core fundamentals</li>
+          <li>Data structures basics</li>
+          <li>Strong problem-solving base</li>
+        </ul>
+      </div>
+      <a href="#contact" class="card-cta">Get started</a>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 1.4 0l1.6-1.6a1 1 0 0 0 0-1.4l-1.6-1.6a1 1 0 0 0-1.4 0L13.1 3.3a1 1 0 0 0 0 1.4l1.6 1.6z"/><path d="M2 22l6.5-1.5L21 8l-4-4L4.5 15.5 3 22z"/></svg></div>
+          <div class="card-title">Custom Scripts</div>
+          <div class="card-desc">Tell me what's eating your time and I'll write a script for it — Python or Bash, built to your exact need.</div>
+        </div>
+      </div>
+      <div class="card-mid">
+        <ul class="service-list">
+          <li>Built to your requirements</li>
+          <li>Python or Bash</li>
+          <li>Fast turnaround</li>
+        </ul>
+      </div>
+      <a href="#contact" class="card-cta">Get started</a>
+    </div>
+
+  </div>
+</section>
+
+<section id="about">
+  <div class="about-wrap">
+    <div class="about-photo">
+      <img src="arsham.png" alt="Arsham">
+    </div>
+    <div class="about-text">
+      <div class="eyebrow">about</div>
+      <h2>Hi, I'm Arsham.</h2>
+      <p>I teach <strong>Python</strong>, <strong>Bash</strong>, and <strong>C++</strong> — one-on-one, at your pace. If you don't need lessons, I also build custom scripts for whatever's slowing you down.</p>
+      <p>No fluff, no filler courses. Just practical skills or a working script, whichever you need.</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-box">
+    <div class="eyebrow">say hi</div>
+    <h2>Let's connect</h2>
+    <p style="color:var(--dim); margin-top:12px;">Questions, requests, or just want to talk shop — find me here.</p>
+    <div class="contact-links">
+      <a class="social-pill" href="https://instagram.com/ofx.arshu.2" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+        Instagram
+      </a>
+      <a class="social-pill" href="https://snapchat.com/add/ofx.arshh" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c3 0 5 2.2 5 5.2 0 1.7-.2 3-.2 4 .8.5 1.8.6 2.4.7.4.1.6.6.2.9-.4.3-1.3.8-2.3 1.1.1.5.3 1 .7 1.3.6.5 1.5.6 1.9.7.4.1.4.6.1.8-.6.4-1.6.7-2.6.8-.1.3-.2.7-.6 1-.6.5-1.6.3-2.4.6-.7.3-1.3 1.1-2.4 1.1s-1.7-.8-2.4-1.1c-.8-.3-1.8-.1-2.4-.6-.4-.3-.5-.7-.6-1-1-.1-2-.4-2.6-.8-.3-.2-.3-.7.1-.8.4-.1 1.3-.2 1.9-.7.4-.3.6-.8.7-1.3-1-.3-1.9-.8-2.3-1.1-.4-.3-.2-.8.2-.9.6-.1 1.6-.2 2.4-.7 0-1-.2-2.3-.2-4C7 4.2 9 2 12 2z"/></svg>
+        Snapchat
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span><span class="brand">Arsham Dev</span> — code lessons and custom scripts.</span>
+  <span id="year"></span>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = "© " + new Date().getFullYear();
+
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pre = btn.closest('.card').querySelector('.code-preview pre');
+      const text = pre.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        btn.classList.add('done');
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.classList.remove('done');
+        }, 1500);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
